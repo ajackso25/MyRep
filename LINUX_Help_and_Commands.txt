@@ -1,0 +1,166 @@
+SET UP GSOS:
+
+chmod 755 rungsos.sh
+./rungsos.sh
+================================
+
+cd web
+--git clone git@gitlab.com:joerhodes3/web.git
+pip install virtualenv
+virtualenv -p python3 ~/ENV_py3
+source ~/ENV_py3/bin//activate
+pip install -r requirements.txt
+python manage.py runserver
+
+=============================================
+
+UPGRADE UBUNTU:
+sudo apt-get update        # Fetches the list of available updates
+sudo apt-get upgrade       # Strictly upgrades the current packages
+sudo apt-get dist-upgrade  # Installs updates (new ones)
+
+=============================================
+Vuetify/Jenkins/OpenShift/SonarQube
+=============================================
+MR Builds = Merge Request Builds
+PR Builds = Pull Request Builds
+=============================================
+AWS Cluster
+Lab Cluster
+=============================================
+.md = markdown file
+=============================================
+Discussed code repositories and strategies for storing code and releasing project.
+------------------------------------------------
+When do we consider items as "ready for release?
+- Clear deliverables of requirements
+- Acceptance criteria defined
+- Broken down into smallest possible size
+- Has been estimated
+- Dependencies Resolved
+- Shared understanding of story
+- Design is ready
+- Tasked appropriately
+- Task complete within Sprint
+-----------------------------------------------
+- Acceptance criteria is met
+- Automated tests passed
+- Code is reviewed in some manner
+- Demoable in shared environment
+- Clearly written code
+- Story closed out
+=============================================
+Pairing - Act of 2 programmers working together on the same code on the same screen.
+Google Code - LiveShare (Can use shared code environment)
+Mobbing - A bunch of people get together to solve a piece of code.
+=============================================
+======    OPENSHIFT SETUP FOR LINUX    ======
+=============================================
+
+https://gist.github.com/arsho/b23572d5990936e70b9fd0f8216fc0b9
+(for installing OC on debian (Ubuntu)
+For RHEL based clients:
+$> sudo subscription-manager repos --enable="rhel-7-server-ose-3.1-rpms"
+$> sudo yum install atomic-openshift-clients
+
+----------------------------------------------
+
+Go here to download the:
+Download OKD - The Enterprise Open Source Kubernetes Distribution
+
+Download the latest OKD Server and Client Tools Binaries
+
+https://www.okd.io/download.html
+
+Linux set path to a directory:
+I made a directory in my home called 'bin'.
+
+export PATH=~/bin:$PATH
+=============================================
+The AWS openshift cluster is here :
+https://console.ocp-dev.agilesof.com:8443/
+You'll want to choose 'socom_ldap' as the login mechanism
+your username will be 'firstname.lastname'
+
+oc login -u andrew.jackson -p password https://console.ocp-dev.agilesof.com:8443
+=============================================
+Load Ansible on machine:
+pip install ansible
+https://github.com/dwasinge/python-examples/tree/master/django_rest_framework/.openshift-applier
+ansible-galaxy install -r requirements.yml --roles-path=roles
+
+This will list the available templates:
+oc get templates -n openshift
+oc get templates -n openshift | grep django
+oc export template -o yaml -n openshift django-psql-example > django-psql-example.yml
+
+=============================================
+(apply has parameters)
+apply.yml -> seed-hosts.yml -> binary-template-with-secrets.yml
+
+From the command prompt:
+ansible-playbook apply.yml
+=============================================
+============= GIT        ====================
+=============================================
+
+C:\Users\ajack>type readme.md
+"# MyRep"
+
+C:\Users\ajack>git init
+Reinitialized existing Git repository in C:/Users/ajack/.git/
+
+C:\Users\ajack>git config --global user.email "ajackso2@gmail.com"
+
+C:\Users\ajack>git add readme.md
+
+C:\Users\ajack>git commit -am 'initial commit'
+fatal: Paths with -a does not make sense.
+
+C:\Users\ajack>git commit -am "initial commit"
+[master (root-commit) f1b39e4] initial commit
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+
+--------------------------------
+make a new branch
+C:\Users\ajack>git checkout -b new_branch
+C:\Users\ajack>git commit -am "first commit on new_branch"
+--------------------------------
+switch branches
+git checkout master
+--------------------------------
+merge branches
+git merge new_branch
+--------------------------------
+resolve conflicts
+fix file then:
+git add
+git commit -m 'fixed merge conflict'
+
+==============================================
+5/16/2019 - Goals:
+- Get current application running on labs cluster
+- Weighting Tool separated out
+- Data Entry Tool separated out
+=============================================
+======== Bring database into POD ============
+=============================================
+=============================================
+'Join a project:
+oc projects
+oc project gsos-test-db
+oc get pods
+'Find pod name and connect to instance
+'w7p2s : POD NAME"
+oc rsh postgresql-1-w7p2s
+'Copy files to DB
+oc rsync ~/Downloads/ postgresql-1-w7p2s:/opt/app-root/src/data
+============================================
+'Then restore the Postgres database
+pg_restore -c -U postgres -d gsos -v "data/gsos_backup_20" -W
+-c to clean the database
+-i to ignore any database version checks
+-U to force a user
+-d to select the database
+-v verbose mode, don't know why
