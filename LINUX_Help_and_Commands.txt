@@ -154,8 +154,19 @@ oc get pods
 'Find pod name and connect to instance
 'w7p2s : POD NAME"
 oc rsh postgresql-1-w7p2s
+
 'Copy files to DB
 oc rsync ~/Downloads/ postgresql-1-w7p2s:/opt/app-root/src/data
+'Run Psql
+psql
+'List Databases
+\l
+'Connect to the gsos database
+\c gsos
+'List tables
+\dts
+'Make your sql statements
+select * from lkp_colors;
 ============================================
 'Then restore the Postgres database
 pg_restore -c -U postgres -d gsos -v "data/gsos_backup_20" -W
@@ -164,3 +175,5 @@ pg_restore -c -U postgres -d gsos -v "data/gsos_backup_20" -W
 -U to force a user
 -d to select the database
 -v verbose mode, don't know why
+==============================================
+https://jenkins-gsos-ci-cd.apps.socom.rht-labs.com/
